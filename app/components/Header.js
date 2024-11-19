@@ -40,6 +40,10 @@ const Header = () => {
     };
     checkWalletConnection();
   }, []);
+
+  const truncatedAddress = walletAddress && walletAddress.length > 0
+    ? `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`
+    : '';
   
   
   return (
@@ -49,9 +53,8 @@ const Header = () => {
         onClick={handleConnect}
         className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg"
       >
-        {/* {connected ? `Disconnect (${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)})` : "Connect Wallet"} */}
-        {connected ? `Disconnect (${walletAddress})` : "Connect Wallet"}
-
+        {connected ? `Disconnect (${truncatedAddress})` : "Connect Wallet"}
+        
       </button>
     </header>
 

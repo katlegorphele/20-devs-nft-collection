@@ -103,7 +103,7 @@ export async function getTotalMinted() {
     if (!contract) initializeContract();
     
     // return (await contract.tokenCounter()).toNumber();
-    return 1
+    return 5
   }
   
   /**

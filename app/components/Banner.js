@@ -2,14 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getTotalMinted, getTokenMetadata } from '@/utils/web3';
+import { getTotalMinted, getTokenMetadata, getConnectedWallet } from '@/utils/web3';
+import MintButton from './MintButton';
 
 const Banner = () => {
   const [totalMinted, setTotalMinted] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(1); // Start at token ID 1
   const [nftData, setNftData] = useState(null); // Store current NFT metadata
+  const [walletAddress, setWalletAddress] = useState(null);
 
-  // Fetch total minted NFTs and metadata for the current NFT
+  // Fetch total minted NFTs, metadata for the current NFT, and wallet connection
   useEffect(() => {
     const fetchTotalMinted = async () => {
       try {
@@ -24,7 +26,7 @@ const Banner = () => {
       try {
         const metadataURI = await getTokenMetadata(tokenId);
         const ipfsURI = metadataURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
-        const response = await fetch(metadataURI);
+        const response = await fetch(ipfsURI); // Corrected to fetch from IPFS URL
         const metadata = await response.json();
         setNftData(metadata);
       } catch (error) {
@@ -32,9 +34,23 @@ const Banner = () => {
       }
     };
 
+    const checkWalletConnection = async () => {
+      try {
+        const address = await getConnectedWallet();
+        if (address) {
+          setWalletAddress(address);
+        }
+      } catch (error) {
+        console.error("Error fetching wallet address:", error);
+      }
+    };
+
+    // Call functions on component mount
     fetchTotalMinted();
     if (currentIndex > 0) fetchNftData(currentIndex);
-  }, [currentIndex]);
+    checkWalletConnection(); // Ensure wallet connection is checked
+
+  }, [currentIndex]); // Dependencies only on currentIndex
 
   // Navigation Handlers
   const handleNext = () => {
@@ -73,8 +89,11 @@ const Banner = () => {
 
         {/* Details Section */}
         <div className="md:col-span-2">
-          <p className="py-5">
+          <p className="py-2">
             The <span>20 DEVS</span> Collection
+          </p>
+          <p className="text-sm mt-2 text-bold">
+            <strong>Total Supply: </strong> {totalMinted}
           </p>
           <h2 className="text-3xl font-bold">
             {nftData?.name || 'Loading NFT...'}
@@ -83,12 +102,9 @@ const Banner = () => {
             {nftData?.description ||
               'Fetching metadata for the selected NFT...'}
           </p>
-          <p className="text-sm mt-2">
-            <strong>Total Minted: </strong> {totalMinted}
-          </p>
-          <button className="bg-white text-black px-4 py-2 mt-4 rounded-lg shadow-md">
-            Mint NFT
-          </button>
+          
+          {/* Pass walletAddress to the MintButton */}
+          {walletAddress && <MintButton recipientAddress={walletAddress} />}
         </div>
       </div>
 

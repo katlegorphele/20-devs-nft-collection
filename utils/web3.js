@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import C_ABI from '@/utils/MyNFT.json';
-const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const CONTRACT_ADDRESS = "0x8Df02c53Cb41A572de5402D868Fe978E437f123a";
 const CONTRACT_ABI = C_ABI.abi;
 
 let provider, signer, contract;
@@ -9,12 +9,13 @@ let provider, signer, contract;
  * Initialize the provider and contract object
  */
 
-export function initializeContract() {
+export async function initializeContract() {
     if (typeof window !== "undefined" && window.ethereum) {
       provider = new ethers.BrowserProvider(window.ethereum);
-      signer = provider.getSigner();
+      signer = await provider.getSigner();
       contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
     } else {
+        alert("Please install Metamask")
       throw new Error("MetaMask is not installed");
     }
   }
@@ -46,17 +47,13 @@ export async function getConnectedWallet() {
 export async function switchToSepolia() {
     try {
       await provider.send("wallet_switchEthereumChain", [
-        { chainId: ethers.toBeHex(11155111) }, // Sepolia Chain ID
+        { chainId: ethers.hexlify(11155111) }, // Sepolia Chain ID
       ]);
     } catch (error) {
       console.error("Failed to switch network", error);
     }
   }
 
-/**
- * Mint NFT
- * @param {string} tokenURI - URI of the token
- */
 
 /**
  * Mint a new NFT
@@ -86,8 +83,15 @@ export async function burnNFT(tokenId) {
    * @returns {string} The token's metadata URI
    */
   export async function getTokenMetadata(tokenId) {
-    if (!contract) initializeContract();
-    return await contract.tokenURI(tokenId);
+    if (!contract) await initializeContract();
+    // log succesful connection
+    if (contract) console.log(`Connected to ${contract}`)
+    console.log('we are here')
+    let uri = await contract.tokenURI(tokenId);
+    uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
+    console.log(uri)
+  
+  return uri;
   }
 
   /**
@@ -96,7 +100,9 @@ export async function burnNFT(tokenId) {
  */
 export async function getTotalMinted() {
     if (!contract) initializeContract();
-    return (await contract.tokenCounter()).toNumber();
+    
+    // return (await contract.tokenCounter()).toNumber();
+    return 1
   }
   
   /**

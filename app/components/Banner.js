@@ -10,9 +10,10 @@ const Banner = () => {
               <Image
                 src="/images/1.png"
                 alt="NFT"
-                className="rounded-lg object-cover"
+                className="rounded-lg object-cover w-full"
                 width={300} // Adjust dimensions as needed
-                height={300}
+                height={350}
+                priority={true}
               />
             </div>
     

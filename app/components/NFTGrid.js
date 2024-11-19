@@ -34,15 +34,15 @@ const NFTGrid = () => {
     },
   ];
 
-  const [fetchednfts, setNFTs] = useState([]);
+  // const [fetchednfts, setNFTs] = useState([]);
 
-  useEffect(() => {
-    const fetchNFTs = async () => {
-      const nftData = await getNFTs();
-      setNFTs(nftData);
-    }
-    fetchNFTs();
-  }, []);
+  // useEffect(() => {
+  //   const fetchNFTs = async () => {
+  //     const nftData = await getNFTs();
+  //     setNFTs(nftData);
+  //   }
+  //   fetchNFTs();
+  // }, []);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>

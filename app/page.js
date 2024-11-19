@@ -11,7 +11,7 @@ export default function Home() {
       <h2 className="text-2xl font-bold text-center">
         View NFTs</h2>
       </div>
-      <NFTGrid/>
+      {/* <NFTGrid/> */}
     </div>
   );
 }

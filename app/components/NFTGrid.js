@@ -2,9 +2,29 @@
 
 import React, {useState, useEffect} from 'react'
 import NFTCard from './NFTCard';
-import { getNFTs } from '@/utils/web3';
+import { getOwnedNFTs, getConnectedWallet, initializeContract } from '@/utils/web3';
 
 const NFTGrid = () => {
+  const [fetchedNFTs, setFetchedNFTs] = useState([]);
+  const [walletAddress, setWalletAddress] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchNFTs = async () => {
+      try {
+        const address = await getConnectedWallet();
+        setWalletAddress(address);
+        const nfts = await getOwnedNFTs();
+        setFetchedNFTs(nfts);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    };
+    fetchNFTs();
+  } , []);
 
   // dummy data for now
   const nfts = [
@@ -34,15 +54,6 @@ const NFTGrid = () => {
     },
   ];
 
-  // const [fetchednfts, setNFTs] = useState([]);
-
-  // useEffect(() => {
-  //   const fetchNFTs = async () => {
-  //     const nftData = await getNFTs();
-  //     setNFTs(nftData);
-  //   }
-  //   fetchNFTs();
-  // }, []);
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6'>

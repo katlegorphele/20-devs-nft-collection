@@ -23,6 +23,7 @@ const Banner = () => {
     const fetchNftData = async (tokenId) => {
       try {
         const metadataURI = await getTokenMetadata(tokenId);
+        const ipfsURI = metadataURI.replace('ipfs://', 'https://ipfs.io/ipfs/');
         const response = await fetch(metadataURI);
         const metadata = await response.json();
         setNftData(metadata);
@@ -49,10 +50,19 @@ const Banner = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
         {/* Image Section */}
         <div className="flex justify-center md:justify-end">
-          {nftData && (
+          {nftData && nftData.image ? (
             <Image
-              src={nftData.image || '/images/placeholder.png'}
+              src={nftData.image.startsWith('ipfs://') ? nftData.image.replace('ipfs://', 'https://ipfs.io/ipfs/') : nftData.image}
               alt={nftData.name || 'NFT'}
+              className="rounded-lg object-cover w-full"
+              width={300}
+              height={350}
+              priority={true}
+            />
+          ) : (
+            <Image
+              src="/images/21.png"
+              alt="Placeholder NFT"
               className="rounded-lg object-cover w-full"
               width={300}
               height={350}

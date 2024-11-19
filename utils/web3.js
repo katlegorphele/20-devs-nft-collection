@@ -90,6 +90,7 @@ export async function burnNFT(tokenId) {
     let uri = await contract.tokenURI(tokenId);
     uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
     console.log(uri)
+    
   
   return uri;
   }

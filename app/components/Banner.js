@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { getTotalMinted, getTokenMetadata, getConnectedWallet } from '@/utils/web3';
+import { getTotalMinted, getTokenMetadata, getConnectedWallet, getNFTOwner } from '@/utils/web3';
 import MintButton from './MintButton';
 
 const Banner = () => {
@@ -51,6 +51,9 @@ const Banner = () => {
     checkWalletConnection(); // Ensure wallet connection is checked
 
   }, [currentIndex]); // Dependencies only on currentIndex
+
+  // get nft owner
+  
 
   // Navigation Handlers
   const handleNext = () => {

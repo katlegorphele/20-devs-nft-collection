@@ -86,10 +86,8 @@ export async function burnNFT(tokenId) {
     if (!contract) await initializeContract();
     // log succesful connection
     if (contract) console.log(`Connected to ${contract}`)
-    console.log('we are here')
     let uri = await contract.tokenURI(tokenId);
     uri = uri.replace("ipfs://", "https://ipfs.io/ipfs/");
-    console.log(uri)
     
   
   return uri;
@@ -101,9 +99,17 @@ export async function burnNFT(tokenId) {
  */
 export async function getTotalMinted() {
     if (!contract) initializeContract();
+    // let tx = await contract.tokenCounter();
+    // tx.wait();
+    // console.log("Total Minted:", tx);
     
     // return (await contract.tokenCounter()).toNumber();
-    return 5
+    return 20
+  }
+
+  export async function getNFTOwner(tokenId) {
+    if (!contract) initializeContract();
+    return await contract.ownerOf(tokenId);
   }
   
   /**

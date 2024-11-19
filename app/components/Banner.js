@@ -53,7 +53,7 @@ const Banner = () => {
   }, [currentIndex]); // Dependencies only on currentIndex
 
   // get nft owner
-  
+
 
   // Navigation Handlers
   const handleNext = () => {
@@ -96,7 +96,7 @@ const Banner = () => {
             The <span>20 DEVS</span> Collection
           </p>
           <p className="text-sm mt-2 text-bold">
-            <strong>Total Supply: </strong> {totalMinted}
+            <strong>Total Supply: </strong> {totalMinted}/20
           </p>
           <h2 className="text-3xl font-bold">
             {nftData?.name || 'Loading NFT...'}
